@@ -1,162 +1,267 @@
-import streamlit as st
-import os
-from PIL import Image
-import time
+"""
+MySQL Handbook - Complete Guide to MySQL Database
+=================================================
+A comprehensive Streamlit application for learning MySQL database concepts,
+commands, and best practices.
 
-# Set page configuration
+Author: MySQL Handbook Team
+Version: 2.0
+"""
+
+import streamlit as st
+import sys
+import os
+import importlib.util
+from pathlib import Path
+
+# ============================================================================
+# Configuration and Setup
+# ============================================================================
+
+# Configure Streamlit page settings
 st.set_page_config(
     page_title="MySQL Handbook",
-    page_icon="🐬",
+    page_icon="🗃️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Load and apply custom CSS
-with open(os.path.join("assets", "style.css")) as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+# Add the pages directory to the Python path
+pages_dir = Path(__file__).parent / "pages"
+sys.path.append(str(pages_dir))
 
-# Configure sidebar
-def sidebar():
-    # Add logo
-    logo_path = os.path.join("assets", "images", "logo.png")
-    if os.path.exists(logo_path):
-        logo = Image.open(logo_path)
-        st.sidebar.image(logo, width=200)
-    
-    st.sidebar.title("MySQL Handbook")
-    st.sidebar.caption("Your comprehensive guide to MySQL")
-    
-    # Add separator
-    st.sidebar.markdown("---")
-    
-    # Display author info
-    st.sidebar.markdown("### About")
-    st.sidebar.info(
-        """
-        This app is a comprehensive guide to MySQL database management system.
-        Navigate through different sections to learn various aspects of MySQL.
-        """
-    )
-    
-    # Add separator
-    st.sidebar.markdown("---")
-    
-    # Version info
-    st.sidebar.caption("Version 1.0.0")
-    st.sidebar.caption(f"Last updated: May 31, 2025")
+# ============================================================================
+# Page Functions
+# ============================================================================
 
-# Configure main content for home page
-def main():
-    # Initialize session state for tracking current page
-    if "current_page" not in st.session_state:
-        st.session_state.current_page = "Home"
+def show_home():
+    """Display the home page content"""
+    st.title("🏠 Welcome to MySQL Handbook")
+    st.markdown("""
+    ### Your Complete Guide to MySQL Database
     
-    # Display the sidebar
-    sidebar()
+    Welcome to the most comprehensive MySQL learning platform! This handbook covers 
+    everything from basic queries to advanced database management techniques.
     
-    # Add content for the home page
-    st.title("Welcome to MySQL Handbook")
-    st.subheader("Your Interactive Guide to MySQL Database Management")
+    **What you'll learn:**
+    - 🔍 Basic and Advanced Queries
+    - 📋 Data Definition Language (DDL)
+    - ✏️ Data Manipulation Language (DML)
+    - 🔒 Data Control Language (DCL)
+    - 🔄 Transaction Control Language (TCL)
+    - 📊 Aggregate Functions and Analytics
     
-    # Introduction with animation
+    **Start your journey** by selecting a module from the sidebar!
+    """)
+    
+    # Quick start section
     with st.container():
-        col1, col2 = st.columns([2, 1])
-        
-        with col1:
-            st.write("""
-            ### What is MySQL?
-            
-            MySQL is one of the world's most popular open-source relational database management systems.
-            It's known for its reliability, robustness, and performance, making it a top choice for web applications.
-            
-            ### What will you learn?
-            
-            This handbook covers everything from basic queries to advanced database administration:
-            """)
-            
-            topics = [
-                "Basic SQL Queries",
-                "Data Definition Language (DDL)",
-                "Data Manipulation Language (DML)",
-                "Data Control Language (DCL)",
-                "Transaction Control Language (TCL)",
-                "Aggregate Functions and Complex Queries",
-                "Interactive SQL Query Editor"
-            ]
-            
-            for topic in topics:
-                st.markdown(f"- {topic}")
-        
-        with col2:
-            # Show MySQL logo or relevant image
-            mysql_image_path = os.path.join("assets", "images", "ChatGPT Image May 29, 2025, 08_26_54 PM.png")
-            if os.path.exists(mysql_image_path):
-                st.image(mysql_image_path, width=300)
-    
-    # Add a "Get Started" section
-    st.markdown("---")
-    with st.container():
-        st.header("Get Started")
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            st.info("### Basic Queries")
-            st.write("Learn the fundamental SQL queries for retrieving and filtering data.")
-            st.page_link("pages/02_BasicQuery.py", label="Start Learning Basic Queries", icon="📊")
-            
+            st.info("""
+            **👋 New to MySQL?**
+            Start with Basic Queries to learn the fundamentals.
+            """)
+        
         with col2:
-            st.success("### Data Manipulation")
-            st.write("Master the art of inserting, updating, and deleting data in MySQL.")
-            st.page_link("pages/04_DML.py", label="Explore Data Manipulation", icon="✏️")
-            
+            st.success("""
+            **🚀 Ready to Practice?**
+            Use our SQL Query Editor to test your skills.
+            """)
+        
         with col3:
-            st.warning("### SQL Query Editor")
-            st.write("Practice your SQL skills with our interactive query editor.")
-            st.page_link("pages/SQLQueryEdtor.py", label="Open SQL Editor", icon="💻")
+            st.warning("""
+            **📚 Need Reference?**
+            Check out our Quick Links for documentation.
+            """)
 
-    # Add interactive example section
-    st.markdown("---")
-    with st.container():
-        st.header("Quick SQL Example")
-        
-        code = '''SELECT customer.name, COUNT(orders.id) as order_count
-FROM customers
-JOIN orders ON customers.id = orders.customer_id
-GROUP BY customer.id
-HAVING COUNT(orders.id) > 5
-ORDER BY order_count DESC
-LIMIT 10;'''
-        
-        st.code(code, language="sql")
-        
-        if st.button("Explain This Query"):
-            with st.spinner("Analyzing query..."):
-                time.sleep(1)  # Simulating processing time
-            
-            st.success("Query Explanation")
-            explanation = """
-            This query:
-            1. Selects customer names and counts their orders
-            2. Joins the customers and orders tables
-            3. Groups results by customer ID
-            4. Filters to only include customers with more than 5 orders
-            5. Orders results by order count (descending)
-            6. Limits results to the top 10 customers
-            """
-            st.markdown(explanation)
+def show_basic_query():
+    """Display basic queries learning module"""
+    try:
+        # Import the restructured module directly
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "basic_query_module", 
+            Path(__file__).parent / "pages" / "02_BasicQuery.py"
+        )
+        basic_query_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(basic_query_module)
+        basic_query_module.show_basic_query()
+    except Exception as e:
+        # Fallback content if module import fails
+        st.title("🔍 Basic Queries")
+        st.markdown("""
+        Learn the fundamental MySQL query operations including SELECT, WHERE, 
+        ORDER BY, and more.
+        """)
+        st.info("This module will teach you essential querying techniques.")
+        st.error(f"⚠️ Module loading failed: {str(e)}")
+
+def show_ddl():
+    """Display DDL commands learning module"""
+    st.title("📋 DDL Commands")
+    st.markdown("""
+    Master Data Definition Language commands for creating and modifying 
+    database structures.
+    """)
+    st.info("Learn CREATE, ALTER, DROP, and TRUNCATE commands.")
+
+def show_dml():
+    """Display DML operations learning module"""
+    st.title("✏️ DML Operations")
+    st.markdown("""
+    Understand Data Manipulation Language for working with data in your tables.
+    """)
+    st.info("Master INSERT, UPDATE, DELETE, and SELECT operations.")
+
+def show_dcl():
+    """Display DCL controls learning module"""
+    st.title("🔒 DCL Controls")
+    st.markdown("""
+    Learn Data Control Language for managing user permissions and access control.
+    """)
+    st.info("Understand GRANT, REVOKE, and security best practices.")
+
+def show_tcl():
+    """Display TCL management learning module"""
+    st.title("🔄 TCL Management")
+    st.markdown("""
+    Master Transaction Control Language for managing database transactions.
+    """)
+    st.info("Learn COMMIT, ROLLBACK, SAVEPOINT, and transaction handling.")
+
+def show_aggregate_query():
+    """Display aggregate functions learning module"""
+    st.title("📊 Aggregate Functions")
+    st.markdown("""
+    Explore MySQL's powerful aggregate functions for data analysis and reporting.
+    """)
+    st.info("Master COUNT, SUM, AVG, MAX, MIN, and GROUP BY operations.")
+
+def show_query_editor():
+    """Display SQL query editor tool"""
+    st.title("💻 SQL Query Editor")
+    st.markdown("""
+    Practice your MySQL skills with our interactive query editor.
+    """)
+    st.info("Write, test, and execute your SQL queries in a safe environment.")
+
+# ============================================================================
+# UI Components
+# ============================================================================
+
+def create_header():
+    """Create the main header with logo and title"""
+    # Create header container
+    header_container = st.container()
     
-    # Add feedback section
-    st.markdown("---")
-    with st.container():
-        st.subheader("Feedback")
-        col1, col2 = st.columns([3, 1])
+    with header_container:
+        # Create columns for logo and title
+        col1, col2 = st.columns([1, 4])
         
         with col1:
-            st.text_area("Share your thoughts or suggestions:", placeholder="Type your feedback here...")
+            # Display logo if it exists
+            logo_path = "assets/images/logo.png"
+            if os.path.exists(logo_path):
+                st.image(logo_path, width=120)
+            else:
+                st.markdown("🗃️")  # Fallback emoji if logo not found
         
         with col2:
-            st.selectbox("Rate this handbook:", options=["Select", "⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"])
-            st.button("Submit Feedback")
+            st.markdown("""
+            # 🗃️ MySQL Handbook
+            ### *Complete Guide to MySQL Database*
+            """)
+    
+    st.divider()
+
+def create_sidebar_navigation():
+    """Create and configure the sidebar navigation"""
+    with st.sidebar:
+        # Page definitions
+        home_page = st.Page(show_home, title="Home", icon="🏠")
+        
+        learning_pages = [
+            st.Page(show_basic_query, title="Basic Queries", icon="🔍"),
+            st.Page(show_ddl, title="DDL Commands", icon="📋"),
+            st.Page(show_dml, title="DML Operations", icon="✏️"),
+            st.Page(show_dcl, title="DCL Controls", icon="🔒"),
+            st.Page(show_tcl, title="TCL Management", icon="🔄"),
+            st.Page(show_aggregate_query, title="Aggregate Functions", icon="📊")
+        ]
+        
+        tools_pages = [
+            st.Page(show_query_editor, title="SQL Query Editor", icon="💻")
+        ]
+        
+        # Create navigation structure
+        nav = st.navigation({
+            "Home": [home_page],
+            "Learning Modules": learning_pages,
+            "Tools": tools_pages
+        })
+        
+        return nav
+
+def create_sidebar_content():
+    """Create additional sidebar content"""
+    with st.sidebar:
+        # Quick Links section
+        st.subheader("🔗 Quick Links")
+        
+        with st.expander("📖 Documentation"):
+            st.markdown("""
+            - [Official MySQL Docs](https://dev.mysql.com/doc/)
+            - [SQL Tutorial](https://www.w3schools.com/sql/)
+            - [MySQL Workbench](https://www.mysql.com/products/workbench/)
+            """)
+        
+        with st.expander("💡 Tips & Tricks"):
+            st.info("💡 **Pro Tip**: Use EXPLAIN to analyze query performance!")
+            st.success("✅ **Remember**: Always backup before making schema changes!")
+            st.warning("⚠️ **Caution**: Test queries on sample data first!")
+        
+        with st.expander("🎯 Learning Path"):
+            st.markdown("""
+            **Recommended learning sequence:**
+            1. 🔍 Basic Queries
+            2. 📋 DDL Commands  
+            3. ✏️ DML Operations
+            4. 📊 Aggregate Functions
+            5. 🔒 DCL Controls
+            6. 🔄 TCL Management
+            7. 💻 Practice with Query Editor
+            """)
+        
+        st.divider()
+        
+        # Footer information
+        st.caption("MySQL Handbook v2.0")
+        st.caption("Built with ❤️ using Streamlit")
+
+# ============================================================================
+# Main Application
+# ============================================================================
+
+def main():
+    """Main application function"""
+    try:
+        # Create main header with logo and title
+        create_header()
+        
+        # Create sidebar navigation
+        nav = create_sidebar_navigation()
+        
+        # Add additional sidebar content
+        create_sidebar_content()
+        
+        # Run the selected page
+        nav.run()
+        
+    except Exception as e:
+        st.error(f"Application error: {e}")
+        st.stop()
 
 if __name__ == "__main__":
     main()

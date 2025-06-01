@@ -12,6 +12,7 @@ import streamlit as st
 import sys
 import os
 import importlib.util
+import pandas as pd
 from pathlib import Path
 
 # ============================================================================
@@ -31,121 +32,128 @@ pages_dir = Path(__file__).parent / "pages"
 sys.path.append(str(pages_dir))
 
 # ============================================================================
-# Page Functions
+# Module Import Helper Functions
 # ============================================================================
 
+def load_module(module_file, module_name):
+    """Load a module from file path with error handling"""
+    try:
+        spec = importlib.util.spec_from_file_location(
+            module_name, 
+            pages_dir / module_file
+        )
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    except Exception as e:
+        st.error(f"⚠️ Failed to load {module_name}: {str(e)}")
+        return None
+
+def safe_call_function(module, function_name, fallback_title, fallback_description):
+    """Safely call a function from a module with fallback content"""
+    try:
+        if module and hasattr(module, function_name):
+            getattr(module, function_name)()
+        else:
+            # Fallback content
+            st.title(fallback_title)
+            st.markdown(fallback_description)
+            st.info("This module is under development. Please check back later.")
+    except Exception as e:
+        st.error(f"⚠️ Error in {function_name}: {str(e)}")
+        st.title(fallback_title)
+        st.markdown(fallback_description)
+
+# ============================================================================
+# Page Functions
+# ============================================================================
 def show_home():
     """Display the home page content"""
-    st.title("🏠 Welcome to MySQL Handbook")
-    st.markdown("""
-    ### Your Complete Guide to MySQL Database
-    
-    Welcome to the most comprehensive MySQL learning platform! This handbook covers 
-    everything from basic queries to advanced database management techniques.
-    
-    **What you'll learn:**
-    - 🔍 Basic and Advanced Queries
-    - 📋 Data Definition Language (DDL)
-    - ✏️ Data Manipulation Language (DML)
-    - 🔒 Data Control Language (DCL)
-    - 🔄 Transaction Control Language (TCL)
-    - 📊 Aggregate Functions and Analytics
-    
-    **Start your journey** by selecting a module from the sidebar!
-    """)
-    
-    # Quick start section
-    with st.container():
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            st.info("""
-            **👋 New to MySQL?**
-            Start with Basic Queries to learn the fundamentals.
-            """)
-        
-        with col2:
-            st.success("""
-            **🚀 Ready to Practice?**
-            Use our SQL Query Editor to test your skills.
-            """)
-        
-        with col3:
-            st.warning("""
-            **📚 Need Reference?**
-            Check out our Quick Links for documentation.
-            """)
-
+    # Load and call home module
+    home_module = load_module("01_Home.py", "home_module")
+    safe_call_function(home_module, "show_home", 
+                      "🏠 Welcome to MySQL Handbook",
+                      """
+                      ### Your Complete Guide to MySQL Database
+                      
+                      Welcome to the most comprehensive MySQL learning platform! This handbook covers 
+                      everything from basic queries to advanced database management techniques.
+                      
+                      **What you'll learn:**
+                      - 🔍 Basic and Advanced Queries
+                      - 📋 Data Definition Language (DDL)
+                      - ✏️ Data Manipulation Language (DML)
+                      - 🔒 Data Control Language (DCL)
+                      - 🔄 Transaction Control Language (TCL)
+                      - 📊 Aggregate Functions and Analytics
+                      
+                      **Start your journey** by selecting a module from the sidebar!
+                      """)
+            
 def show_basic_query():
     """Display basic queries learning module"""
-    try:
-        # Import the restructured module directly
-        import importlib.util
-        spec = importlib.util.spec_from_file_location(
-            "basic_query_module", 
-            Path(__file__).parent / "pages" / "02_BasicQuery.py"
-        )
-        basic_query_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(basic_query_module)
-        basic_query_module.show_basic_query()
-    except Exception as e:
-        # Fallback content if module import fails
-        st.title("🔍 Basic Queries")
-        st.markdown("""
-        Learn the fundamental MySQL query operations including SELECT, WHERE, 
-        ORDER BY, and more.
-        """)
-        st.info("This module will teach you essential querying techniques.")
-        st.error(f"⚠️ Module loading failed: {str(e)}")
+    basic_query_module = load_module("02_BasicQuery.py", "basic_query_module")
+    safe_call_function(basic_query_module, "show_basic_query",
+                      "🔍 Basic Queries",
+                      """
+                      Learn the fundamental MySQL query operations including SELECT, WHERE, 
+                      ORDER BY, and more.
+                      """)
 
 def show_ddl():
     """Display DDL commands learning module"""
-    st.title("📋 DDL Commands")
-    st.markdown("""
-    Master Data Definition Language commands for creating and modifying 
-    database structures.
-    """)
-    st.info("Learn CREATE, ALTER, DROP, and TRUNCATE commands.")
+    ddl_module = load_module("03_DDL.py", "ddl_module")
+    safe_call_function(ddl_module, "main",
+                      "📋 DDL Commands",
+                      """
+                      Master Data Definition Language commands for creating and modifying 
+                      database structures.
+                      """)
 
 def show_dml():
     """Display DML operations learning module"""
-    st.title("✏️ DML Operations")
-    st.markdown("""
-    Understand Data Manipulation Language for working with data in your tables.
-    """)
-    st.info("Master INSERT, UPDATE, DELETE, and SELECT operations.")
+    dml_module = load_module("04_DML.py", "dml_module")
+    safe_call_function(dml_module, "main",
+                      "✏️ DML Operations",
+                      """
+                      Understand Data Manipulation Language for working with data in your tables.
+                      """)
 
 def show_dcl():
     """Display DCL controls learning module"""
-    st.title("🔒 DCL Controls")
-    st.markdown("""
-    Learn Data Control Language for managing user permissions and access control.
-    """)
-    st.info("Understand GRANT, REVOKE, and security best practices.")
+    dcl_module = load_module("05_DCL.py", "dcl_module")
+    safe_call_function(dcl_module, "main",
+                      "🔒 DCL Controls",
+                      """
+                      Learn Data Control Language for managing user permissions and access control.
+                      """)
 
 def show_tcl():
     """Display TCL management learning module"""
-    st.title("🔄 TCL Management")
-    st.markdown("""
-    Master Transaction Control Language for managing database transactions.
-    """)
-    st.info("Learn COMMIT, ROLLBACK, SAVEPOINT, and transaction handling.")
+    tcl_module = load_module("06_TCL.py", "tcl_module")
+    safe_call_function(tcl_module, "main",
+                      "🔄 TCL Management",
+                      """
+                      Master Transaction Control Language for managing database transactions.
+                      """)
 
 def show_aggregate_query():
     """Display aggregate functions learning module"""
-    st.title("📊 Aggregate Functions")
-    st.markdown("""
-    Explore MySQL's powerful aggregate functions for data analysis and reporting.
-    """)
-    st.info("Master COUNT, SUM, AVG, MAX, MIN, and GROUP BY operations.")
+    aggregate_module = load_module("07_AggregateQuery.py", "aggregate_module")
+    safe_call_function(aggregate_module, "main",
+                      "📊 Aggregate Functions",
+                      """
+                      Explore MySQL's powerful aggregate functions for data analysis and reporting.
+                      """)
 
 def show_query_editor():
     """Display SQL query editor tool"""
-    st.title("💻 SQL Query Editor")
-    st.markdown("""
-    Practice your MySQL skills with our interactive query editor.
-    """)
-    st.info("Write, test, and execute your SQL queries in a safe environment.")
+    editor_module = load_module("SQLQueryEditor.py", "editor_module")
+    safe_call_function(editor_module, "main",
+                      "💻 SQL Query Editor",
+                      """
+                      Practice your MySQL skills with our interactive query editor.
+                      """)
 
 # ============================================================================
 # UI Components

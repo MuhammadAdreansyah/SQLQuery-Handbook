@@ -1,28 +1,30 @@
 # 🗄️ MySQL Handbook - Interactive Learning Platform
 
-Sebuah aplikasi pembelajaran interaktif untuk menguasai MySQL dari tingkat dasar hingga mahir, dibangun dengan Streamlit.
+A comprehensive interactive learning platform for mastering MySQL from beginner to advanced levels, built with Streamlit.
 
-## ✨ Fitur Unggulan
+## ✨ Key Features
 
-- **🎮 Interactive Learning** - Query Editor real-time dengan syntax highlighting
-- **📚 7 Modul Lengkap** - Dari Basic Query hingga Advanced Topics
-- **🎯 User-Friendly Interface** - Navigation yang intuitif dengan sidebar
-- **💻 Praktik Langsung** - Hands-on experience dengan contoh nyata
-- **📊 Progress Tracking** - Monitor kemajuan belajar Anda
-- **📱 Responsive Design** - Optimal di desktop dan mobile
+- **🎮 Interactive Learning** - Real-time Query Editor with syntax highlighting support
+- **📚 8 Complete Modules** - From Basic Queries to Advanced Transaction Management
+- **🎯 User-Friendly Interface** - Intuitive navigation with organized sidebar
+- **💻 Hands-On Practice** - Real-world examples with sample databases
+- **📊 Visual Learning** - Charts, graphs, and interactive demonstrations
+- **🔄 Transaction Simulator** - Interactive TCL operations with savepoints
+- **🧪 Practice Labs** - Step-by-step exercises with solutions
+- **📱 Responsive Design** - Optimized for desktop and mobile devices
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.8 atau lebih tinggi
+- Python 3.8 or higher
 - pip (Python package manager)
 
 ### Installation
 
-1. **Clone atau download project**
+1. **Clone or download project**
    ```bash
    git clone <repository-url>
-   cd mysql-handbook
+   cd "MySQL Handbook"
    ```
 
 2. **Install dependencies**
@@ -30,69 +32,76 @@ Sebuah aplikasi pembelajaran interaktif untuk menguasai MySQL dari tingkat dasar
    pip install -r requirements.txt
    ```
 
-3. **Jalankan aplikasi**
+3. **Run the application**
    ```bash
    streamlit run app.py
    ```
 
-4. **Buka browser**
-   - Aplikasi akan otomatis terbuka di `http://localhost:8501`
-   - Atau buka URL tersebut secara manual
+4. **Open browser**
+   - Application will automatically open at `http://localhost:8501`
+   - Or manually navigate to that URL
 
-## 📁 Struktur Project
+## 📁 Project Structure
 
 ```
-mysql-handbook/
-├── app.py                 # Main application file
-├── requirements.txt       # Python dependencies
-├── README.md             # Documentation
-├── .gitignore           # Git ignore file
-├── assets/              # Static assets
-│   ├── logo.png         # Application logo
-│   └── style.css        # Custom CSS styling
-├── pages/               # Page modules
-│   ├── __init__.py      # Package initialization
-│   ├── home.py          # Home page (01_Home.py)
-│   ├── basic_query.py   # Basic Query module (02_BasicQuery.py)
-│   ├── ddl.py           # DDL module (03_DDL.py)
-│   ├── dml.py           # DML module (04_DML.py)
-│   ├── dcl.py           # DCL module (05_DCL.py)
-│   ├── tcl.py           # TCL module (06_TCL.py)
-│   ├── aggregate_query.py # Aggregate module (07_AggregateQuery.py)
-│   └── sql_query_editor.py # Query Editor (SQLQueryEditor.py)
-├── config/              # Configuration files
-├── data/                # Sample data files
-└── log/                 # Application logs
+MySQL Handbook/
+├── app.py                    # Main application file
+├── requirements.txt          # Python dependencies
+├── README.md                # Documentation
+├── USER_GUIDE.md            # User guide and tutorials
+├── PROJECT_COMPLETION_SUMMARY.md  # Development summary
+├── test_modules.py          # Module testing script
+├── assets/                  # Static assets
+│   ├── style.css           # Custom styling
+│   ├── images/             # Logo and graphics
+├── pages/                   # Learning modules
+│   ├── 01_Home.py          # Welcome and introduction
+│   ├── 02_BasicQuery.py    # SELECT, WHERE, ORDER BY fundamentals
+│   ├── 03_DDL.py           # Data Definition Language
+│   ├── 04_DML.py           # Data Manipulation Language
+│   ├── 05_DCL.py           # Data Control Language  
+│   ├── 06_TCL.py           # Transaction Control Language (Enhanced)
+│   ├── 07_AggregateQuery.py # Aggregate functions and analytics
+│   └── SQLQueryEditor.py   # Interactive SQL editor (Enhanced)
+├── config/                 # Configuration files
+└── log/                   # Application logs
 ```
 
-## 📚 Modul Pembelajaran
+## 📚 Learning Modules
 
 ### 🌱 Beginner Level
-1. **🏠 Home** - Overview dan pengenalan platform
-2. **🔍 Basic Query** - SELECT, WHERE, ORDER BY, LIMIT
-3. **🏗️ DDL** - CREATE, ALTER, DROP TABLE
-4. **📝 DML** - INSERT, UPDATE, DELETE
+1. **🏠 Home** - Platform overview and learning path guidance
+2. **🔍 Basic Queries** - SELECT, WHERE, ORDER BY, LIMIT operations
+3. **📋 DDL Commands** - CREATE, ALTER, DROP table operations
+4. **✏️ DML Operations** - INSERT, UPDATE, DELETE data manipulation
 
 ### 🚀 Intermediate Level
-5. **📊 Aggregate & Functions** - COUNT, SUM, AVG, GROUP BY
-6. **⚡ TCL** - Transaction Control Language
-7. **🔐 DCL** - Data Control Language
+5. **📊 Aggregate Functions** - COUNT, SUM, AVG, GROUP BY, HAVING
+6. **🔒 DCL Controls** - User permissions and access control
 
-### 💻 Practice
-8. **SQL Query Editor** - Interactive practice environment
+### 🎓 Advanced Level
+7. **🔄 TCL Management** ⭐ - Complete transaction control with ACID properties
+8. **💻 SQL Query Editor** ⭐ - Interactive practice environment with real data
 
-## 🎯 Learning Path Rekomendasi
+## 🎯 Learning Path Recommendations
 
-### Path 1: Complete Beginner (2-3 minggu)
-- Start: Home → Basic Query → DDL → DML → Query Editor
-- Target: Memahami operasi dasar database MySQL
+### Path 1: Complete Beginner (2-3 weeks)
+```
+Home → Basic Queries → DDL Commands → DML Operations → Query Editor
+```
+**Target:** Master fundamental database operations
 
-### Path 2: Intermediate (3-4 minggu)
-- Continue: Aggregate & Functions → TCL → DCL → Advanced Practice
-- Target: Menguasai operasi database lanjutan
+### Path 2: Intermediate Developer (3-4 weeks)
+```
+Aggregate Functions → DCL Controls → TCL Management → Advanced Practice
+```
+**Target:** Master advanced database operations and security
 
-### Path 3: Advanced (4-6 minggu)
-- Focus: Complex queries, optimization, real-world projects
+### Path 3: Advanced Professional (4-6 weeks)
+```
+Focus: Complex transactions, performance optimization, real-world scenarios
+```
+**Target:** Production-ready database expertise
 - Target: MySQL Expert level skills
 
 ## 🔧 Development

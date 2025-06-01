@@ -194,8 +194,8 @@ def show_aggregate_interactive():
                                      ["sale_amount", "quantity_sold", "sale_id"])
         
         with col2:
-            use_distinct = st.checkbox("Use DISTINCT")
-            use_where = st.checkbox("Add WHERE condition")
+            use_distinct = st.checkbox("Use DISTINCT", key="aggregate_distinct")
+            use_where = st.checkbox("Add WHERE condition", key="aggregate_where")
             
             if use_where:
                 where_column = st.selectbox("WHERE Column:", 
@@ -383,13 +383,12 @@ def show_group_by_interactive():
                                           "SUM(sale_amount) as total_revenue",
                                           "AVG(sale_amount) as avg_sale",
                                           "MIN(sale_amount) as min_sale",
-                                          "MAX(sale_amount) as max_sale"],
-                                         default=["COUNT(*) as count", "SUM(sale_amount) as total_revenue"])
+                                          "MAX(sale_amount) as max_sale"],                                         default=["COUNT(*) as count", "SUM(sale_amount) as total_revenue"])
         
         with col3:
             st.write("**Options:**")
-            use_order_by = st.checkbox("Add ORDER BY", value=True)
-            limit_results = st.checkbox("Limit Results")
+            use_order_by = st.checkbox("Add ORDER BY", value=True, key="group_by_order")
+            limit_results = st.checkbox("Limit Results", key="group_by_limit")
             
             if limit_results:
                 limit_count = st.slider("Limit to:", 5, 50, 10)
@@ -618,8 +617,7 @@ def show_having_interactive():
             st.write("**SELECT Aggregates:**")
             select_aggregates = st.multiselect("Select Functions:",
                                              ["COUNT(*)", "SUM(sale_amount)", "AVG(sale_amount)", 
-                                              "MIN(sale_amount)", "MAX(sale_amount)"],
-                                             default=["COUNT(*)", "SUM(sale_amount)"])
+                                              "MIN(sale_amount)", "MAX(sale_amount)"],                                             default=["COUNT(*)", "SUM(sale_amount)"])
         
         with col2:
             st.write("**HAVING Conditions:**")
@@ -628,7 +626,7 @@ def show_having_interactive():
             having_operator = st.selectbox("Operator:", [">", ">=", "<", "<=", "="])
             having_value = st.number_input("Value:", value=50.0)
             
-            add_where = st.checkbox("Add WHERE condition")
+            add_where = st.checkbox("Add WHERE condition", key="having_where")
             if add_where:
                 where_condition = st.text_input("WHERE clause:", 
                                               placeholder="year = 2024")

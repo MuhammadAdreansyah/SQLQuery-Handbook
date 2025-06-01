@@ -818,17 +818,16 @@ def show_query_builder():
             columns = ['*']
         
         selected_columns = st.multiselect("Columns:", columns, default=columns[:3])
-    
     with col2:
         st.markdown("**Add Conditions:**")
-        add_where = st.checkbox("Add WHERE clause")
+        add_where = st.checkbox("Add WHERE clause", key="query_builder_where")
         
         if add_where:
             where_column = st.selectbox("Column:", columns)
             operator = st.selectbox("Operator:", ['=', '>', '<', '>=', '<=', 'LIKE'])
             where_value = st.text_input("Value:")
         
-        add_limit = st.checkbox("Add LIMIT")
+        add_limit = st.checkbox("Add LIMIT", key="query_builder_limit")
         if add_limit:
             limit_value = st.number_input("Limit:", min_value=1, value=10)
     
@@ -864,12 +863,6 @@ def show_query_builder():
 
 def main():
     """Main function for SQL Query Editor."""
-    st.set_page_config(
-        page_title="MySQL Handbook - Query Editor",
-        page_icon="💻",
-        layout="wide"
-    )
-    
     # Main navigation
     tab1, tab2, tab3 = st.tabs([
         "💻 Query Editor",

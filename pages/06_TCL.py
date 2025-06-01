@@ -792,11 +792,6 @@ def show_performance_exercise():
 
 def main():
     """Main function for TCL module."""
-    st.set_page_config(
-        page_title="MySQL Handbook - TCL",
-        page_icon="🔄",
-        layout="wide"
-    )
     
     # Main header
     st.title("🔄 Transaction Control Language (TCL)")

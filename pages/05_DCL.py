@@ -1327,11 +1327,6 @@ GRANT 'app_role' TO 'app_service'@'192.168.1.%';
 
 def main():
     """Main function to run the DCL module"""
-    st.set_page_config(
-        page_title="MySQL DCL - Data Control Language",
-        page_icon="🔐",
-        layout="wide"
-    )
     
     # Sidebar Navigation
     st.sidebar.title("🔐 DCL Navigation")

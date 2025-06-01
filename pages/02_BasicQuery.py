@@ -1141,28 +1141,25 @@ def create_query_builder():
                 sample_data.columns.tolist(),
                 default=['name', 'department', 'salary']
             )
-        
-        # WHERE clause
+          # WHERE clause
         st.markdown("**WHERE Clause (optional):**")
-        use_where = st.checkbox("Add WHERE condition")
+        use_where = st.checkbox("Add WHERE condition", key="basic_query_where")
         
         if use_where:
             where_column = st.selectbox("Filter column:", sample_data.columns.tolist())
             where_operator = st.selectbox("Operator:", ['=', '!=', '>', '<', '>=', '<=', 'LIKE'])
             where_value = st.text_input("Value:", placeholder="Enter filter value")
     
-    with builder_col2:
-        # ORDER BY clause
+    with builder_col2:        # ORDER BY clause
         st.markdown("**ORDER BY Clause (optional):**")
-        use_order = st.checkbox("Add ORDER BY")
+        use_order = st.checkbox("Add ORDER BY", key="basic_query_order")
         
         if use_order:
             order_column = st.selectbox("Sort column:", sample_data.columns.tolist())
             order_direction = st.selectbox("Direction:", ["ASC", "DESC"])
-        
-        # LIMIT clause
+          # LIMIT clause
         st.markdown("**LIMIT Clause (optional):**")
-        use_limit = st.checkbox("Add LIMIT")
+        use_limit = st.checkbox("Add LIMIT", key="basic_query_limit")
         
         if use_limit:
             limit_value = st.number_input("Number of rows:", min_value=1, max_value=20, value=5)

@@ -142,7 +142,8 @@ def create_learning_objectives():
 
 def create_content_tabs():
     """Create the main content tabs"""
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    tab_command, tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "💻 Command",
         "📋 SELECT Basics", 
         "🔍 WHERE Clause", 
         "📶 ORDER BY", 
@@ -150,20 +151,83 @@ def create_content_tabs():
         "🧪 Practice Lab"
     ])
     
+    with tab_command:
+        show_command_tab()
     with tab1:
         show_select_basics()
-    
     with tab2:
         show_where_clause()
-    
     with tab3:
         show_order_by()
-    
     with tab4:
         show_limit_offset()
-    
     with tab5:
         show_practice_lab()
+
+def show_command_tab():
+    """Tab khusus kumpulan query basic query"""
+    st.markdown("# 💻 Kumpulan Query Dasar SQL")
+    st.info("Berikut adalah kumpulan query yang sering digunakan pada basic query di MySQL. Copy dan gunakan sesuai kebutuhan!")
+    
+    st.markdown("""
+### 1. SELECT Semua Kolom
+```sql
+SELECT * FROM employees;
+```
+
+### 2. SELECT Kolom Tertentu
+```sql
+SELECT name, department, salary FROM employees;
+```
+
+### 3. SELECT Dengan Alias
+```sql
+SELECT name AS employee_name, department AS dept FROM employees;
+```
+
+### 4. SELECT Dengan Perhitungan
+```sql
+SELECT name, salary, salary * 12 AS annual_salary FROM employees;
+```
+
+### 5. WHERE Clause (Filter Data)
+```sql
+SELECT * FROM employees WHERE department = 'IT';
+SELECT * FROM employees WHERE salary > 70000;
+SELECT * FROM employees WHERE name LIKE 'J%';
+```
+
+### 6. WHERE Dengan AND/OR
+```sql
+SELECT * FROM employees WHERE department = 'IT' AND salary > 70000;
+SELECT * FROM employees WHERE department = 'IT' OR department = 'HR';
+```
+
+### 7. WHERE Dengan IN, BETWEEN, LIKE
+```sql
+SELECT * FROM employees WHERE department IN ('IT', 'Finance', 'Marketing');
+SELECT * FROM employees WHERE salary BETWEEN 65000 AND 75000;
+SELECT * FROM employees WHERE name LIKE 'A%';
+```
+
+### 8. ORDER BY (Urutkan Data)
+```sql
+SELECT * FROM employees ORDER BY salary DESC;
+SELECT * FROM employees ORDER BY department ASC, salary DESC;
+```
+
+### 9. LIMIT & OFFSET (Ambil Data Tertentu)
+```sql
+SELECT * FROM employees LIMIT 5;
+SELECT * FROM employees LIMIT 5 OFFSET 10;
+```
+
+### 10. Kombinasi WHERE, ORDER BY, LIMIT
+```sql
+SELECT * FROM employees WHERE department = 'IT' ORDER BY salary DESC LIMIT 3;
+```
+    """)
+    st.success("Gunakan query di atas untuk latihan dan eksplorasi data!")
 
 # ============================================================================
 # Tab Content Functions

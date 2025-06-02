@@ -791,7 +791,8 @@ def main():
         st.markdown("Learn to create, modify, and manage database structures with MySQL DDL operations.")
         
         # Create tabs for different DDL topics
-        tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        tab_command, tab1, tab2, tab3, tab4, tab5 = st.tabs([
+            "💻 Command",
             "📊 Database Operations", 
             "🗂️ Table Operations", 
             "🔐 Indexes & Constraints",
@@ -799,18 +800,16 @@ def main():
             "🧪 Practice Lab"
         ])
         
+        with tab_command:
+            show_command_tab_ddl()
         with tab1:
             show_database_operations()
-        
         with tab2:
             show_table_operations()
-        
         with tab3:
             show_indexes_constraints()
-        
         with tab4:
             show_storage_engines()
-        
         with tab5:
             show_practice_lab()
         
@@ -822,6 +821,86 @@ def main():
         st.error(f"An error occurred: {str(e)}")
         st.info("Please check your database connection and try again.")
 
+def show_command_tab_ddl():
+    """Tab khusus kumpulan query DDL dasar"""
+    st.markdown("# 💻 Kumpulan Query DDL Dasar MySQL")
+    st.info("Berikut adalah kumpulan query yang sering digunakan pada operasi DDL di MySQL. Copy dan gunakan sesuai kebutuhan!")
+    st.markdown("""
+### 1. CREATE DATABASE
+```sql
+CREATE DATABASE nama_database CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
 
-if __name__ == "__main__":
-    main()
+### 2. DROP DATABASE
+```sql
+DROP DATABASE IF EXISTS nama_database;
+```
+
+### 3. ALTER DATABASE
+```sql
+ALTER DATABASE nama_database CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+```
+
+### 4. SHOW DATABASES
+```sql
+SHOW DATABASES;
+SHOW CREATE DATABASE nama_database;
+```
+
+### 5. CREATE TABLE
+```sql
+CREATE TABLE customers (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    phone VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+```
+
+### 6. ALTER TABLE
+```sql
+-- Add column
+ALTER TABLE customers ADD COLUMN birth_date DATE;
+-- Modify column
+ALTER TABLE customers MODIFY COLUMN phone VARCHAR(25);
+-- Drop column
+ALTER TABLE customers DROP COLUMN birth_date;
+-- Add index
+ALTER TABLE customers ADD INDEX idx_email (email);
+```
+
+### 7. DROP TABLE
+```sql
+DROP TABLE IF EXISTS nama_tabel;
+```
+
+### 8. INDEXES
+```sql
+CREATE INDEX idx_name ON customers (first_name, last_name);
+CREATE UNIQUE INDEX idx_email ON customers (email);
+DROP INDEX idx_name ON customers;
+```
+
+### 9. CONSTRAINTS
+```sql
+-- Foreign Key
+ALTER TABLE orders ADD CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES customers(customer_id);
+-- Check Constraint
+ALTER TABLE products ADD CONSTRAINT chk_price CHECK (price > 0);
+-- Not Null
+ALTER TABLE customers MODIFY email VARCHAR(100) NOT NULL;
+```
+
+### 10. STORAGE ENGINE
+```sql
+CREATE TABLE logs (
+    log_id INT PRIMARY KEY,
+    message TEXT,
+    created_at TIMESTAMP
+) ENGINE=MyISAM;
+```
+    """)
+    st.success("Gunakan query di atas untuk latihan dan eksplorasi DDL!")

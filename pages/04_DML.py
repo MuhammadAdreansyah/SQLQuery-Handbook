@@ -736,7 +736,7 @@ def show_practice_lab():
         show_realworld_scenarios()
     
     with tab3:
-        show_performance_challenge()
+        show_performance_challenge(key_prefix="lab_")
 
 
 def show_guided_dml_exercises():
@@ -858,12 +858,10 @@ def show_realworld_scenarios():
                     st.warning("Please provide a solution.")
 
 
-def show_performance_challenge():
+def show_performance_challenge(key_prefix="main_"):
     """Show DML performance optimization challenge."""
     st.subheader("🏆 DML Performance Optimization Challenge")
-    
     st.write("**Challenge:** Optimize the following slow DML operations")
-    
     slow_queries = [
         {
             'operation': 'Slow UPDATE',
@@ -884,29 +882,21 @@ INSERT INTO orders (customer_id, total) VALUES (2, 150.00);
 (1, 100.00), (2, 150.00), (3, 200.00) -- batch insert"""
         }
     ]
-    
     for i, query_info in enumerate(slow_queries):
         with st.expander(f"Optimization Challenge {i+1}: {query_info['operation']}", expanded=True):
             st.write("**Problematic Query:**")
             st.code(query_info['query'], language="sql")
-            
             st.write(f"**Problem:** {query_info['problem']}")
-            
-            user_optimization = st.text_area(f"Your Optimization {i+1}:", 
-                                           height=100, key=f"optimization_{i}")
-            
-            if st.button(f"Show Optimal Solution {i+1}"):
+            user_optimization = st.text_area(f"Your Optimization {i+1}:", height=100, key=f"{key_prefix}performance_challenge_textarea_{i}")
+            if st.button(f"Show Optimal Solution {i+1}", key=f"{key_prefix}performance_challenge_button_{i}"):
                 st.write("**Optimized Solution:**")
                 st.code(query_info['solution'], language="sql")
-    
     # Performance metrics simulation
     st.write("**Performance Impact Simulation:**")
-    
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Before Optimization", "45.2 seconds", delta=None)
         st.metric("Rows Processed", "1,000,000", delta=None)
-    
     with col2:
         st.metric("After Optimization", "2.8 seconds", delta="-42.4 seconds", delta_color="inverse")
         st.metric("Performance Gain", "16x faster", delta="+1500%", delta_color="normal")
@@ -920,40 +910,117 @@ def main():
     """Main function to display DML module content."""
     try:
         st.title("✏️ Data Manipulation Language (DML)")
-        st.markdown("Master the art of data manipulation with INSERT, UPDATE, DELETE, and data transfer operations.")
+        st.markdown("Learn to insert, update, and delete data with MySQL DML operations.")
         
         # Create tabs for different DML topics
-        tab1, tab2, tab3, tab4, tab5 = st.tabs([
-            "➕ INSERT Operations",
-            "✏️ UPDATE Operations", 
-            "🗑️ DELETE Operations",
+        tab_command, tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+            "💻 Command",
+            "➕ INSERT", 
+            "✏️ UPDATE", 
+            "🗑️ DELETE",
             "📥📤 Import/Export",
-            "🧪 Practice Lab"
+            "🧪 Practice Lab",
+            "🏆 Performance Challenge"
         ])
         
+        with tab_command:
+            show_command_tab_dml()
         with tab1:
             show_insert_operations()
-        
         with tab2:
             show_update_operations()
-        
         with tab3:
             show_delete_operations()
-        
         with tab4:
             show_import_export()
-        
         with tab5:
             show_practice_lab()
-        
-        # Footer
-        st.markdown("---")
-        st.markdown("**⚠️ Safety First:** Always backup your data before performing bulk DML operations!")
+        with tab6:
+            show_performance_challenge(key_prefix="main_")
         
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
         st.info("Please check your database connection and try again.")
 
+def show_command_tab_dml():
+    """Tab khusus kumpulan query DML dasar"""
+    st.markdown("# 💻 Kumpulan Query DML Dasar MySQL")
+    st.info("Berikut adalah kumpulan query yang sering digunakan pada operasi DML di MySQL. Copy dan gunakan sesuai kebutuhan!")
+    st.markdown("""
+### 1. INSERT Data
+```sql
+INSERT INTO customers (first_name, last_name, email)
+VALUES ('John', 'Doe', 'john.doe@email.com');
 
-if __name__ == "__main__":
-    main()
+INSERT INTO customers (first_name, last_name, email)
+VALUES 
+    ('Jane', 'Smith', 'jane.smith@email.com'),
+    ('Mike', 'Johnson', 'mike.johnson@email.com');
+```
+
+### 2. INSERT dengan SELECT
+```sql
+INSERT INTO archived_customers (customer_id, full_name, email)
+SELECT customer_id, CONCAT(first_name, ' ', last_name), email
+FROM customers WHERE status = 'inactive';
+```
+
+### 3. UPDATE Data
+```sql
+UPDATE customers SET phone = '+1-555-999-8888' WHERE customer_id = 1;
+UPDATE products SET price = price * 0.9 WHERE category = 'Electronics';
+```
+
+### 4. UPDATE dengan JOIN
+```sql
+UPDATE customers c
+JOIN orders o ON c.customer_id = o.customer_id
+SET c.status = 'vip'
+WHERE o.total_amount > 1000;
+```
+
+### 5. DELETE Data
+```sql
+DELETE FROM customers WHERE customer_id = 1;
+DELETE FROM orders WHERE status = 'cancelled';
+```
+
+### 6. Soft Delete (Rekomendasi)
+```sql
+UPDATE orders SET status = 'cancelled', cancelled_at = NOW() WHERE order_id = 123;
+```
+
+### 7. Bulk INSERT
+```sql
+INSERT INTO customers (first_name, last_name, email) VALUES
+('Anna', 'Taylor', 'anna.taylor@email.com'),
+('Tom', 'Moore', 'tom.moore@email.com');
+```
+
+### 8. Data Import
+```sql
+LOAD DATA INFILE '/path/to/file.csv'
+INTO TABLE customers
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
+```
+
+### 9. Data Export
+```sql
+SELECT * FROM customers
+INTO OUTFILE '/path/to/export.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';
+```
+
+### 10. Upsert (INSERT ON DUPLICATE KEY UPDATE)
+```sql
+INSERT INTO products (product_id, name, price)
+VALUES (1, 'Laptop Pro', 1999.99)
+ON DUPLICATE KEY UPDATE price = VALUES(price);
+```
+    """)
+    st.success("Gunakan query di atas untuk latihan dan eksplorasi DML!")
